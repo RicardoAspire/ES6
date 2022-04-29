@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>ES6</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title">
+                <h1>RICARDO FLORES SALCEDO ES6 Guide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <a href="./index.html"><li>Block Bindings</li></a>
+                    <a href="./functions.html" class="active"><li></li>Functions</li></a>
+                    <a href="./objects.html"><li>Expanded Object Functionality</li></a>
+                    <a href="./maps.html"><li>Sets and Maps</li></a>
+                    <a href="./iterators.html"><li>Iterators and Generators</li></a>
+                    <a href="./classes.html"><li>Classes</li></a>
+                </ul>
+            </nav>
+        </header>
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Functions</h5>
+                            <hr>
+                            <p class="card-text">* They accept more parameters than expected, but the additional parameters will be ignored.</p>
+                            <p class="card-text">* Yo can asign a default value for parameters in case they are not given.</p>                            
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Optional parameters</h5>
+                            <hr>
+                            <p class="card-text">* You can give default values to optional parameters</p>
+                            <pre><code>function makeRequest(url, timeout = 200, callback = function() {}) {
+
+}</code></pre>
+                            </p>
+                            <p class="card-text">* Ignored values are not considered as parameters, for example (only consider first): </p><pre><code>function mixArgs(first, second = "b") { 
+    console.log(arguments.length); 
+}
+mixArgs("a");
+//1
+</code></pre>
+                            <p class="card-text">* Higher order function with a function as an optional parameter</p>
+<pre><code>function getValue() { 
+    return 5; 
+} 
+ 
+function add(first, second = getValue()) { 
+    return first + second; 
+} 
+ 
+console.log(add(1, 1));     // 2 
+console.log(add(1));        // 6 </code></pre>
+                            <p class="card-text">* You can pass a parameter as an input for another parameter, but the parameter you will pass needs to be at the left, example: </p>
+<pre><code>function add(first = second, second) { 
+    return first + second; 
+} 
+ 
+console.log(add(1, 1));         // 2 
+console.log(add(undefined, 1)); // throws error </code></pre>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Rest parameters with spread operator</h5>
+                          <hr>
+                          <p class="card-text">* Indefinite number of values as input</p>
+<pre><code>function checkArgs(...args) { 
+    console.log(args.length);              //2
+    console.log(arguments.length);         //2
+    console.log(args[0], arguments[0]);    //a, a
+    console.log(args[1], arguments[1]);    //b, b
+} 
+ 
+checkArgs("a", "b"); </code></pre>
+                            <p class="card-text">* Rest parameter as input with a constructor function</p>
+<pre><code>var pickFirst = new Function("...args", "return args[0]"); 
+ 
+    console.log(pickFirst(1, 2));   // 1 </code></pre>
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Name of functions</h5>
+                          <hr>
+                          <p class="card-text">You can ask for the name of the function by using ".name", example: </p>
+<pre><code>function doSomething() { 
+    // ... 
+} 
+ 
+var doAnotherThing = function() { 
+    // ... 
+}; 
+ 
+console.log(doSomething.name);          // "doSomething" 
+console.log(doAnotherThing.name);       // "doAnotherThing" </code></pre>
+                            <p class="card-text">Anonymous function is given if you dont give a name to the function, example: </p>
+<pre><code>console.log((new Function()).name);     // "anonymous" </code></pre>
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Block level functions</h5>
+                            <hr>
+                            <p class="card-text">Functions <b>In strict mode</b> are available only in the block they were created, in this example the function only exist inside the if scope example: </p>
+<pre><code>"use strict"; 
+if (true) { 
+    console.log(typeof doSomething);        // "function" 
+
+    function doSomething() { 
+        // ... 
+    } 
+    
+    doSomething(); 
+} 
+    
+console.log(typeof doSomething);            // "undefined" </code></pre>
+                            <p class="card-text">Functions <b>In non-strict mode</b> are available outside the block they were created, in this example the function only exist outside the if scope example: </p>
+<pre><code>"use strict"; 
+if (true) { 
+    console.log(typeof doSomething);        // "function" 
+
+    function doSomething() { 
+        // ... 
+    } 
+    
+    doSomething(); 
+} 
+    
+console.log(typeof doSomething);            // "function" </code></pre>
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+            
+
+
+        </div>
+    </div>
+</body>
+</html>

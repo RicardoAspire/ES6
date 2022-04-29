@@ -1,0 +1,37 @@
+.title{
+    background-color: yellowgreen;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+}
+nav ul {
+    margin-top: 5px;
+    display: flex;
+}
+nav ul li {
+    list-style: none;
+}
+nav ul a {
+    background-color: steelblue;
+    padding: 10px;
+    margin-right: 1%;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid steelblue;
+}
+nav ul a:hover{
+    color: steelblue;
+    background-color: white;
+    border: 1px solid steelblue;
+}
+.active{
+    color: steelblue;
+    background-color: white;
+    border: 1px solid steelblue;
+}
+pre{
+    color: red;
+    background-color: whitesmoke;
+    padding: 5px;
+}
