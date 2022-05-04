@@ -1,5 +1,6 @@
 .title{
-    background-color: yellowgreen;
+    background-color: #023047;
+    color: white;
     border-radius: 5px;
     padding: 15px;
     text-align: center;
@@ -12,23 +13,23 @@ nav ul li {
     list-style: none;
 }
 nav ul a {
-    background-color: steelblue;
+    background-color: #ffb703;
     padding: 10px;
     margin-right: 1%;
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    border: 1px solid steelblue;
+    border: 1px solid #ffb703;
 }
 nav ul a:hover{
-    color: steelblue;
+    color: #023047;
     background-color: white;
-    border: 1px solid steelblue;
+    border: 1px solid #ffb703;
 }
 .active{
-    color: steelblue;
+    color: #023047;
     background-color: white;
-    border: 1px solid steelblue;
+    border: 1px solid #ffb703;
 }
 pre{
     color: red;

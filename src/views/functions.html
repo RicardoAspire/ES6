@@ -21,20 +21,60 @@
                     <a href="./maps.html"><li>Sets and Maps</li></a>
                     <a href="./iterators.html"><li>Iterators and Generators</li></a>
                     <a href="./classes.html"><li>Classes</li></a>
+                    <a href="./promises.html"><li>Promises and Asynchronous Programming</li></a>
+                    <a href="./encapsulating.html"><li>Encapsulating Code with Modules</li></a>
                 </ul>
             </nav>
         </header>
         <div class="content">
             <div class="row">
                 <div class="col">
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Functions</h5>
                             <hr>
                             <p class="card-text">* They accept more parameters than expected, but the additional parameters will be ignored.</p>
                             <p class="card-text">* Yo can asign a default value for parameters in case they are not given.</p>                            
                         </div>
-                      </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                          <h5 class="card-title">Rest parameters with spread operator</h5>
+                          <hr>
+                          <p class="card-text">* Indefinite number of values as input</p>
+<pre><code>function checkArgs(...args) { 
+    console.log(args.length);              //2
+    console.log(arguments.length);         //2
+    console.log(args[0], arguments[0]);    //a, a
+    console.log(args[1], arguments[1]);    //b, b
+} 
+ 
+checkArgs("a", "b"); </code></pre>
+                            <p class="card-text">* Rest parameter as input with a constructor function</p>
+<pre><code>var pickFirst = new Function("...args", "return args[0]"); 
+ 
+    console.log(pickFirst(1, 2));   // 1 </code></pre>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                          <h5 class="card-title">Name of functions</h5>
+                          <hr>
+                          <p class="card-text">You can ask for the name of the function by using ".name", example: </p>
+<pre><code>function doSomething() { 
+    // ... 
+} 
+ 
+var doAnotherThing = function() { 
+    // ... 
+}; 
+ 
+console.log(doSomething.name);          // "doSomething" 
+console.log(doAnotherThing.name);       // "doAnotherThing" </code></pre>
+                            <p class="card-text">Anonymous function is given if you dont give a name to the function, example: </p>
+<pre><code>console.log((new Function()).name);     // "anonymous" </code></pre>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <div class="card mb-4">
@@ -75,49 +115,7 @@ console.log(add(undefined, 1)); // throws error </code></pre>
                 </div>
             </div>
             <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                          <h5 class="card-title">Rest parameters with spread operator</h5>
-                          <hr>
-                          <p class="card-text">* Indefinite number of values as input</p>
-<pre><code>function checkArgs(...args) { 
-    console.log(args.length);              //2
-    console.log(arguments.length);         //2
-    console.log(args[0], arguments[0]);    //a, a
-    console.log(args[1], arguments[1]);    //b, b
-} 
- 
-checkArgs("a", "b"); </code></pre>
-                            <p class="card-text">* Rest parameter as input with a constructor function</p>
-<pre><code>var pickFirst = new Function("...args", "return args[0]"); 
- 
-    console.log(pickFirst(1, 2));   // 1 </code></pre>
-                        </div>
-                      </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                          <h5 class="card-title">Name of functions</h5>
-                          <hr>
-                          <p class="card-text">You can ask for the name of the function by using ".name", example: </p>
-<pre><code>function doSomething() { 
-    // ... 
-} 
- 
-var doAnotherThing = function() { 
-    // ... 
-}; 
- 
-console.log(doSomething.name);          // "doSomething" 
-console.log(doAnotherThing.name);       // "doAnotherThing" </code></pre>
-                            <p class="card-text">Anonymous function is given if you dont give a name to the function, example: </p>
-<pre><code>console.log((new Function()).name);     // "anonymous" </code></pre>
-                        </div>
-                      </div>
-                </div>
-                <div class="col">
+                <div class="col mb-3">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Block level functions</h5>
@@ -152,9 +150,83 @@ console.log(typeof doSomething);            // "function" </code></pre>
                       </div>
                 </div>
             </div>
-
-            
-
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Arrow functions</h5>
+                            <hr>
+                            <p class="card-text">Some interesting things about arrow functions:</p>
+                            <ul>
+                                <li>You can't call an arrow function with the "new" word because they dont have a constructor </li>
+                                <li>In arrow functions there is no -> "this, super, arguments and new.target", but in traditional functions it does</li>
+                                <li>You can't change the value of "this." inside an arrow function</li>
+                                <li>You can't have duplicated named parameters</li>
+                            </ul>    
+                            <p class="card-text">Example of an arrow functin with 1 input:</p>
+<pre><code>var reflect = value => value; 
+//Equivalent to: 
+    
+var reflect = function(value) { 
+    return value; 
+}; </code></pre>
+                            <p class="card-text">Example of an arrow functin with <b>more</b> than 1 input:</p>
+<pre><code>var sum = (num1, num2) => num1 + num2; 
+//Equivalent to: 
+    
+var sum = function(num1, num2) { 
+    return num1 + num2; 
+}; </code></pre>
+                            <p class="card-text">Or: </p>
+<pre><code>var sum = (num1, num2) => { 
+    return num1 + num2; 
+}; 
+//Equivalent to: 
+ 
+var sum = function(num1, num2) { 
+    return num1 + num2; 
+}; </code></pre>
+                            <p class="card-text">Arrow function with <b>no</b> input value: </p>
+<pre><code>var getName = () => "Nicholas"; 
+//Equivalent to: 
+    
+var getName = function() { 
+    return "Nicholas"; 
+}; </code></pre>
+                            <p class="card-text">Arrow function returning a <b>object</b>: </p>
+<pre><code>var getTempItem = id => ({ id: id, name: "Temp" }); 
+//Equivalent to: 
+    
+var getTempItem = function(id) { 
+    
+    return { 
+        id: id, 
+        name: "Temp" 
+    }; 
+}; </code></pre>
+                            <p class="card-text"> <b>Inmediate call</b> functions:</p>
+<pre><code> let person = ((name) => { 
+    return { 
+        getName: function() { 
+            return name; 
+        } 
+    }; 
+    
+})("Nicholas"); 
+    
+console.log(person.getName());      // "Nicholas" </code></pre>
+                            <p class="card-text">How to <b>access to the "parameters" </b> in an arrow function:</p>
+<pre><code>function createArrowFunctionReturningFirstArg() { 
+    return () => arguments[0]; 
+} 
+ 
+var arrowFunction = createArrowFunctionReturningFirstArg(5); 
+ 
+console.log(arrowFunction());       // 5 </code></pre>
+                        </div>
+                      </div>
+                </div>
+            </div>
 
         </div>
     </div>

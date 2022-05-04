@@ -21,9 +21,222 @@
                     <a href="./maps.html"><li>Sets and Maps</li></a>
                     <a href="./iterators.html"><li>Iterators and Generators</li></a>
                     <a href="./classes.html" class="active"><li>Classes</li></a>
+                    <a href="./promises.html"><li>Promises and Asynchronous Programming</li></a>
+                    <a href="./encapsulating.html"><li>Encapsulating Code with Modules</li></a>
                 </ul>
             </nav>
         </header>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Classes</h5>
+                            <hr>
+                            <p class="card-text">Some characteristics about classes:</p>
+                            <ul>
+                                <li>Class declarations act like <b>let</b> declarations, so they do not exist in TDZ</li>
+                                <li>The code inside classes, run in <b>strict mode</b>, no way to use unstrict mode</li>
+                                <li>All methods are non-enumerable</li>
+                                <li>All methods lack an internal <b>construct</b> method, so they will throw an error if you try to call them by <b>new</b></li>
+                                <li>Calling the class construct without <b>new</b> trows error</li>
+                                <li>If you try to overwrite the classname inside a class method, that will throw an error</li>
+                            </ul>   
+                            <p class="card-text">Class example:</p>
+<pre><code>class PersonClass { 
+    //constructor 
+    constructor(name) { 
+        this.name = name; 
+    } 
+ 
+    //function to return the name 
+    sayName() { 
+        console.log(this.name); 
+    } 
+} 
+ 
+let person = new PersonClass("Nicholas"); 
+person.sayName();   // outputs "Nicholas" 
+ 
+console.log(person instanceof PersonClass);     // true 
+console.log(person instanceof Object);          // true 
+ 
+console.log(typeof PersonClass);                    // "function"</code></pre>
+                            <p class="card-text"><b>Immediately invoking the class constructor</b></p>
+<pre><code>let person = new class { 
+ 
+    constructor(name) { 
+        this.name = name; 
+    } 
+ 
+    sayName() { 
+        console.log(this.name); 
+    } 
+ 
+}("Nicholas"); 
+
+person.sayName();       // "Nicholas" </code></pre>
+                            <p class="card-text"><b>Getters and setters</b></p>
+<pre><code>class CustomHTMLElement { 
+ 
+    constructor(element) { 
+        this.element = element; 
+    } 
+ 
+    get html() { 
+        return this.element.innerHTML; 
+    } 
+ 
+    set html(value) { 
+        this.element.innerHTML = value; 
+    } 
+} 
+ 
+var descriptor = Object.getOwnPropertyDescriptor(CustomHTMLElement.prototype, "ht\ml"); 
+console.log("get" in descriptor);   // true 
+console.log("set" in descriptor);   // true 
+console.log(descriptor.enumerable); // false </code></pre>
+                            <p class="card-text"><b>Computed member names</b></p>
+
+<pre><code>let methodName = "sayName"; 
+
+class PersonClass { 
+    
+    constructor(name) { 
+        this.name = name; 
+    } 
+    
+    [methodName]() { 
+        console.log(this.name); 
+    } 
+} 
+    
+let me = new PersonClass("Nicholas"); 
+me.sayName();           // "Nicholas" 
+
+///////////////////////////////////////////////////////////////////////// 
+
+let propertyName = "html"; 
+ 
+class CustomHTMLElement { 
+ 
+    constructor(element) { 
+        this.element = element; 
+    } 
+ 
+    get [propertyName]() { 
+        return this.element.innerHTML; 
+    } 
+ 
+    set [propertyName](value) { 
+        this.element.innerHTML = value; 
+    } 
+} </code></pre>
+                            <p class="card-text"><b>Generators inside classes</b></p>
+<pre><code>class Collection { 
+ 
+    constructor() { 
+        this.items = []; 
+    } 
+ 
+    *[Symbol.iterator]() { 
+        yield *this.items.values(); 
+    } 
+} 
+ 
+var collection = new Collection(); 
+collection.items.push(1); 
+collection.items.push(2); 
+collection.items.push(3); 
+ 
+for (let x of collection) { 
+    console.log(x); 
+} 
+ 
+// Output: 
+// 1 
+// 2 
+// 3 </code></pre>
+                            <p class="card-text"><b>Static members</b></p>
+<pre><code>class PersonClass { 
+ 
+    constructor(name) { 
+        this.name = name; 
+    } 
+ 
+    sayName() { 
+        console.log(this.name); 
+    } 
+ 
+    static create(name) { 
+        return new PersonClass(name); 
+    } 
+} 
+ 
+let person = PersonClass.create("Nicholas"); </code></pre>
+                            <p class="card-text"><b>Inheritance (super() is used to call a constructor from the class who is inherit the actual class)</b></p>
+<pre><code>class Rectangle { 
+    constructor(length, width) { 
+        this.length = length; 
+        this.width = width; 
+    } 
+ 
+    getArea() { 
+        return this.length * this.width; 
+    } 
+} 
+ 
+class Square extends Rectangle { 
+    constructor(length) { 
+         super(length, length); 
+    } 
+} 
+ 
+var square = new Square(3); 
+ 
+console.log(square.getArea());              // 9 
+console.log(square instanceof Square);      // true 
+console.log(square instanceof Rectangle);   // true </code></pre>
+                            <p class="card-text"><b>Super</b> characteristics</p>
+                            <ul>
+                                <li>You can only use super() in a derived class, if you try to use it in a non-derived class (a class that doesn't use extends), or a function, it will throw an error</li>
+                                <li>You must call super() before accessing "this" in the constructor, because super() is responsible for initializing "this", if you try to use "this" before using super() it will throw error</li>
+                                <li>The only way to avoid calling "super()" is to return an object from the class constructor</li>
+                                <li>I can access methods in the base class from which I am inherit by using super.getArea() / super.getValue()</li>
+                            </ul>
+                            <p class="card-text"><b>Inherited Static Members</b></p>
+                            <p class="card-text">In this example, a new static create() method is added to the Rectangle class. Through inheritance, that method is available as Square.create() and behaves in the same manner as the Rectangle.create() method.</p>
+<pre><code>class Rectangle { 
+    constructor(length, width) { 
+        this.length = length; 
+        this.width = width; 
+    } 
+ 
+    getArea() { 
+        return this.length * this.width; 
+    } 
+ 
+    static create(length, width) { 
+        return new Rectangle(length, width); 
+    } 
+} 
+ 
+class Square extends Rectangle { 
+    constructor(length) { 
+         super(length, length); 
+    } 
+} 
+ 
+var rect = Square.create(3, 4); 
+ 
+console.log(rect instanceof Rectangle);     // true 
+console.log(rect.getArea());                // 12 
+console.log(rect instanceof Square);        // false </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

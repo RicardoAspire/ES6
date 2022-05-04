@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Promises</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title">
+                <h1>RICARDO FLORES SALCEDO ES6 Guide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <a href="./index.html"><li>Block Bindings</li></a>
+                    <a href="./functions.html"><li></li>Functions</li></a>
+                    <a href="./objects.html"><li>Expanded Object Functionality</li></a>
+                    <a href="./maps.html"><li>Sets and Maps</li></a>
+                    <a href="./iterators.html"><li>Iterators and Generators</li></a>
+                    <a href="./classes.html"><li>Classes</li></a>
+                    <a href="./promises.html" class="active"><li>Promises and Asynchronous Programming</li></a>
+                    <a href="./encapsulating.html"><li>Encapsulating Code with Modules</li></a>
+                </ul>
+            </nav>
+        </header>
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Promisses</h5>
+                            <hr>
+                            <p class="card-text">Promisses are another option for async program, you can create promisses based on success or failure, so your code will be easy to understand, in Java or C++ you can run different treats at the same time, in javascript no, the code is stored in a job queue </p>
+                            <p class="card-text">The state of a promise when it executes is pending, and if its pending is unsettled, but when the function returns a response, could be: Fulfilled, meaning that was completed sucessfully, or Rejected, meaning that was rejected for any error. </p>
+                            <p class="card-text">The "then()" method is presented on all promises and takes two arguments, the first one is: A function to call when the promise is fulfilled, and the second one is a function that is called if the promise is rejected, both arguments to "then()" are optional, example:</p>
+<pre><code>let promise = readFile("example.txt");  
+
+promise.then(function(contents) { 
+    // fulfillment 
+    console.log(contents); 
+}, function(err) { 
+    // rejection 
+    console.error(err.message); 
+}); 
+ 
+promise.then(function(contents) { 
+    // fulfillment 
+    console.log(contents); 
+}); 
+ 
+promise.then(null, function(err) { 
+    // rejection 
+    console.error(err.message); 
+}); </code></pre>
+
+
+                            <p class="card-text"><b>Catch</b> is like a then() but only for the rejection option.</p>
+<pre><code>promise.catch(function(err) { 
+    // rejection 
+    console.error(err.message); 
+}); 
+ 
+// is the same as: 
+ 
+promise.then(null, function(err) { 
+    // rejection 
+    console.error(err.message); 
+}); </code></pre>
+
+                            <p class="card-text"><b>Promise constructor</b></p>
+                            <p class="card-text">You need to give two arguments, one for the sucess case "resolve()", and another for the failed case "reject()"</p>
+<pre><code>let promise = new Promise(function(resolve, reject) { 
+    console.log("Promise"); 
+    resolve(); 
+}); 
+ 
+promise.then(function() { 
+    console.log("Resolved."); 
+}); 
+ 
+console.log("Hi!"); 
+
+// 
+Promise 
+Hi! 
+Resolved </code></pre>
+                            <p class="card-text"><b>promise.resolve() and promise.reject()</b></p>
+                            <p class="card-text">Promise.resolve() accepts a single argument and returns a promise in the fulfilled state</p>
+<pre><code>let promise = Promise.resolve(42); 
+                             
+promise.then(function(value) { 
+    console.log(value);         // 42 
+}); </code></pre>
+                            <p class="card-text">Promise.reject() accepts a single argument and returns a promise in rejected state</p>
+<pre><code>let promise = Promise.reject(42); 
+                             
+    promise.catch(function(value) { 
+        console.log(value);         // 42 
+    }); </code></pre>
+                            <p class="card-text"><b>Executor errors</b>, you can throw an error wherever you want like this:</p>
+<pre><code>let promise = new Promise(function(resolve, reject) { 
+    throw new Error("Explosion!"); 
+}); 
+ 
+promise.catch(function(error) { 
+    console.log(error.message);     // "Explosion!" 
+}); </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Node.js rejection handling</h5>
+                            <hr>
+                            <p class="card-text">There are two events that identify promises that are rejected and not handled</p>
+                            <ul>
+                                <li>unhandledRejection - Emitted when a promise is rejected and no rejection handler is called within one turn of the event loop </li>
+                                <li>rejectionHandler - Emitted when a promise is rejected and a rejection handler is called after one turn of the event loop </li>
+                            </ul>
+                            <p><b>unhandledRejection</b> example:</p>
+<pre><code>let rejected; 
+ 
+    process.on("unhandledRejection", function(reason, promise) { 
+        console.log(reason.message);            // "Explosion!" 
+        console.log(rejected === promise);      // true 
+    }); 
+     
+    rejected = Promise.reject(new Error("Explosion!")); </code></pre>
+                            <p><b>rejectionHandler</b> example:</p>
+<pre><code>let rejected; 
+ 
+    process.on("rejectionHandled", function(promise) { 
+        console.log(rejected === promise);              // true 
+    }); 
+     
+    rejected = Promise.reject(new Error("Explosion!")); 
+     
+    // wait to add the rejection handler 
+    setTimeout(function() { 
+        rejected.catch(function(value) { 
+            console.log(value.message);     // "Explosion!" 
+        }); 
+    }, 1000); </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Browser rejection handling</h5>
+                            <hr>
+                            <p class="card-text">Browsers also have two events to identify unhandled rejections</p>
+                            <ul>
+                                <li>Unhandledrejection - Emitted when a promise is rejected and no rejection handler is called within one turn of the event loop</li>
+                                <li>rejectionhandled - Emitted when a promise is rejected and a rejection handler is called after one turn of the event loop</li>
+                            </ul>
+                            <p>Those events have the properties: <b>type (Unhandledrejection or rejectionhandled), promise (the promise object that was rejected) and reason (the rejection value), example: </b></p>
+<pre><code>let rejected; 
+
+window.onunhandledrejection = function(event) { 
+    console.log(event.type);                    // "unhandledrejection" 
+    console.log(event.reason.message);          // "Explosion!" 
+    console.log(rejected === event.promise);    // true 
+}; 
+    
+window.onrejectionhandled = function(event) { 
+    console.log(event.type);                    // "rejectionhandled" 
+    console.log(event.reason.message);          // "Explosion!" 
+    console.log(rejected === event.promise);    // true 
+}; 
+    
+rejected = Promise.reject(new Error("Explosion!")); </code></pre>
+                            <p>You can use map like in Node.js but with browser events</p>
+<pre><code>let possiblyUnhandledRejections = new Map(); 
+ 
+// when a rejection is unhandled, add it to the map 
+window.onunhandledrejection = function(event) { 
+    possiblyUnhandledRejections.set(event.promise, event.reason); 
+}; 
+    
+window.onrejectionhandled = function(event) { 
+    possiblyUnhandledRejections.delete(event.promise); 
+}; 
+    
+setInterval(function() { 
+    
+    possiblyUnhandledRejections.forEach(function(reason, promise) { 
+        console.log(reason.message ? reason.message : reason); 
+    
+        // do something to handle these rejections 
+        handleRejection(promise, reason); 
+    }); 
+    
+    possiblyUnhandledRejections.clear(); 
+}, 60000); </code></pre>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Chaining promisses</h5>
+                            <hr>
+                            <p class="card-text">In this code example, the p1.then() is first executed, and stores the value in p2, then p2 has another promise, p2.then(), p2 will return another response to consider the promise as fulfillment </p>
+<pre><code>let p1 = new Promise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+ 
+let p2 = p1.then(function(value) { 
+    console.log(value); 
+}) 
+ 
+p2.then(function() { 
+    console.log("Finished"); 
+}); </code></pre>
+                            <p>You can <b>carch errors using chaining promises</b></p>
+<pre><code>let p1 = new Promise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+ 
+p1.then(function(value) { 
+    throw new Error("Boom!"); 
+}).catch(function(error) { 
+    console.log(error.message);     // "Boom!" 
+}); 
+
+///////////////////////////////////////////////////////// 
+
+let p1 = new Promise(function(resolve, reject) { 
+    throw new Error("Explosion!"); 
+}); 
+ 
+p1.catch(function(error) { 
+    console.log(error.message);     // "Explosion!" 
+    throw new Error("Boom!"); 
+}).catch(function(error) { 
+    console.log(error.message);     // "Boom!" 
+}); </code></pre>
+                            <p>You can <b>send data</b> from one promise to another chaining promises like this:</p>
+<pre><code>let p1 = new Promise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+ 
+p1.then(function(value) { 
+    console.log(value);         // "42" 
+    return value + 1; 
+}).then(function(value) { 
+    console.log(value);         // "43" 
+}); 
+
+///////////////////////////////////////////////////////// 
+
+let p1 = new Promise(function(resolve, reject) { 
+    reject(42); 
+}); 
+ 
+p1.catch(function(value) { 
+    // first fulfillment handler 
+    console.log(value);         // "42" 
+    return value + 1; 
+}).then(function(value) { 
+    // second fulfillment handler 
+    console.log(value);         // "43" 
+}); </code></pre>
+                            <p>You can <b>pass another promise</b> in the return of a promise, but you need one more step, something like this:</p>
+<pre><code> let p1 = new Promise(function(resolve, reject) { 
+        resolve(42); 
+    }); 
+     
+    let p2 = new Promise(function(resolve, reject) { 
+        resolve(43); 
+    }); 
+     
+    p1.then(function(value) { 
+        // first fulfillment handler 
+        console.log(value);     // 42 
+        return p2; 
+    }).then(function(value) { 
+        // second fulfillment handler 
+        console.log(value);     // 43 
+    }); 
+    
+    ///////////////////////////////////////////////////////// 
+    
+    let p1 = new Promise(function(resolve, reject) { 
+        resolve(42); 
+    }); 
+     
+    p1.then(function(value) { 
+        console.log(value);     // 42 
+     
+        // create a new promise 
+        let p2 = new Promise(function(resolve, reject) { 
+            resolve(43); 
+        }); 
+     
+        return p2 
+    }).then(function(value) { 
+        console.log(value);     // 43 
+    }); 
+    
+     </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Multiple promisses</h5>
+                            <hr>
+                            <p class="card-text">You have two methods, promise.all() and promise.race()</p>
+                            <p><b>Promise.all()</b>, receives only one argument, which is an iterable like an array, an array of promises, and returns the promise that is resolved in the iteration, and the returned promise is fulfilled when the whole array of promises is fulfilled, example:</p>
+<pre><code> let p1 = new Promise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+    
+let p2 = new Promise(function(resolve, reject) { 
+    resolve(43); 
+}); 
+    
+let p3 = new Promise(function(resolve, reject) { 
+    resolve(44); 
+}); 
+    
+let p4 = Promise.all([p1, p2, p3]); 
+    
+p4.then(function(value) { 
+    console.log(Array.isArray(value));  // true 
+    console.log(value[0]);              // 42 
+    console.log(value[1]);              // 43 
+    console.log(value[2]);              // 44 
+}); </code></pre>
+                            <p>If one promise of the array is rejected, the returned promise is immediately rejected without waiting to complete, for example:</p>
+<pre><code>let p1 = new Promise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+ 
+let p2 = new Promise(function(resolve, reject) { 
+    reject(43); 
+}); 
+ 
+let p3 = new Promise(function(resolve, reject) { 
+    resolve(44); 
+}); 
+ 
+let p4 = Promise.all([p1, p2, p3]); 
+ 
+p4.catch(function(value) { 
+    console.log(Array.isArray(value))   // false 
+    console.log(value);                 // 43 
+}); </code></pre>
+                            <p><b>Promise.race()</b> is similar to the promise.all(), but this method do not wait until all the promises are fulfilled, as soon as one promise is fulfilled, the return is successful, example: </p>
+<pre><code>let p1 = Promise.resolve(42); 
+
+let p2 = new Promise(function(resolve, reject) { 
+    resolve(43); 
+}); 
+    
+let p3 = new Promise(function(resolve, reject) { 
+    resolve(44); 
+}); 
+    
+let p4 = Promise.race([p1, p2, p3]); 
+    
+p4.then(function(value) { 
+    console.log(value);     // 42 
+}); </code></pre>
+                            <p>You can also <b>add timmers to promises</b> like this:  so you can check which promise finish first</p>
+<pre><code>let p1 = new Promise(function(resolve, reject) { 
+    setTimeout(function() { 
+        resolve(42); 
+    }, 100); 
+}); 
+ 
+let p2 = new Promise(function(resolve, reject) { 
+    reject(43); 
+}); 
+ 
+let p3 = new Promise(function(resolve, reject) { 
+    setTimeout(function() { 
+        resolve(44); 
+    }, 50); 
+}); 
+ 
+let p4 = Promise.race([p1, p2, p3]); 
+ 
+p4.catch(function(value) { 
+    console.log(value);     // 43 
+}); </code></pre>
+                            <p>You can also <b>inherit from a promise</b>, you can create a class with some methods, and the promise will have those methods available, example:</p>
+<pre><code>class MyPromise extends Promise { 
+ 
+    // use default constructor 
+ 
+    success(resolve, reject) { 
+        return this.then(resolve, reject); 
+    } 
+ 
+    failure(reject) { 
+        return this.catch(reject); 
+    } 
+ 
+} 
+ 
+let promise = new MyPromise(function(resolve, reject) { 
+    resolve(42); 
+}); 
+ 
+promise.success(function(value) { 
+    console.log(value);             // 42 
+}).failure(function(value) { 
+    console.log(value); 
+}); </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

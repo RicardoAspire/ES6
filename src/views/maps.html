@@ -21,9 +21,221 @@
                     <a href="./maps.html" class="active"><li>Sets and Maps</li></a>
                     <a href="./iterators.html"><li>Iterators and Generators</li></a>
                     <a href="./classes.html"><li>Classes</li></a>
+                    <a href="./promises.html"><li>Promises and Asynchronous Programming</li></a>
+                    <a href="./encapsulating.html"><li>Encapsulating Code with Modules</li></a>
                 </ul>
             </nav>
         </header>
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Sets</h5>
+                            <hr>
+                            <p class="card-text">The sets delete duplicated values, you can assign just one value or an entire array of values to a set</p>
+                            <p class="card-text">The sets have some methods, like add() and has(), delete() and cleat() to set, check and delete one or delete all for a specific value in the set</p>
+                            <p>Example:</p>
+<pre><code>let set = new Set(); 
+set.add(5); 
+set.add("5"); 
+    
+console.log(set.has(5));    // true 
+console.log(set.has(6));    // false 
+
+set.delete(5); 
+set.clear(); </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Foreach in Set</h5>
+                            <hr>
+                            <p class="card-text">In the sets the <b>key and value, and ownerSet and set</b> are always the same values.</p>
+<pre><code>let set = new Set([1, 2]); 
+ 
+set.forEach(function(value, key, ownerSet) { 
+    console.log(key + " " + value); 
+    console.log(ownerSet === set); 
+}); 
+
+// 
+1 1 
+true 
+2 2 
+true </code></pre>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Set into array convertion</h5>
+                            <hr>
+                            <p class="card-text">When you convert an array into a set, the duplicated values are deleted, example: </p>
+<pre><code>let set = new Set([1, 2, 3, 3, 3, 4, 5]), 
+array = [...set]; 
+ 
+console.log(array);             // [1,2,3,4,5] </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Weak sets</h5>
+                            <hr>
+                            <p class="card-text">There are some differences between Sets and Weak sets, here are some of those differences:</p>
+                            <ul>
+                                <li>In a WeakSet instance, the add() method throws an error when passed a <b>non-object</b>, (has() and delete() always return false()) </li>
+                                <li>WeakSets are <b>not iterables</b> and therefore cannot be used in a for-of loop</li>
+                                <li>WeatSets do not expose any iterators (such as the keys() and values() methods), so there is no way to programmatically determine the content of a weakset</li>
+                                <li>WeakSets do not have a foreach() method</li>
+                                <li>WeakSets do not have a size property</li>
+                            </ul>
+                            <p class="card-text">Example of a WeakSet</p>
+<pre><code>let key1 = {}, 
+key2 = {}, 
+set = new WeakSet([key1, key2]); 
+    
+console.log(set.has(key1));     // true 
+console.log(set.has(key2));     // true </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Maps</h5>
+                            <hr>
+                            <p class="card-text">Maps are a ordered list of key-value pairs, where both the key and the value can have any type, examples:</p>
+<pre><code>let map = new Map(); 
+map.set("title", "Understanding ES6"); 
+map.set("year", 2016); 
+    
+console.log(map.get("title"));      // "Understanding ES6" 
+console.log(map.get("year"));       // 2016 
+
+///////////////////////////////////////////////////////////////////// 
+
+let map = new Map(), 
+    key1 = {}, 
+    key2 = {}; 
+ 
+map.set(key1, 5); 
+map.set(key2, 42); 
+ 
+console.log(map.get(key1));         // 5 
+console.log(map.get(key2));         // 42 </code></pre>
+                            <p class="card-text">Map methods:</p>
+                            <ul>
+                                <li>has(key) - Determines if the given key exists in the map</li>
+                                <li>delete(key) - Removes the key and its value from the map</li>
+                                <li>clear() - Removes all the keys with values</li>
+                                <li>size - gives the size of the map</li>
+                            </ul>
+                            <p class="card-text">Examples:</p>
+<pre><code>let map = new Map(); 
+map.set("name", "Nicholas"); 
+map.set("age", 25); 
+    
+console.log(map.size);          // 2 
+    
+console.log(map.has("name"));   // true 
+console.log(map.get("name"));   // "Nicholas" 
+    
+console.log(map.has("age"));    // true 
+console.log(map.get("age"));    // 25 
+    
+map.delete("name"); 
+console.log(map.has("name"));   // false 
+console.log(map.get("name"));   // undefined 
+console.log(map.size);          // 1 
+    
+map.clear(); 
+console.log(map.has("name"));   // false 
+console.log(map.get("name"));   // undefined 
+console.log(map.has("age"));    // false 
+console.log(map.get("age"));    // undefined 
+console.log(map.size);          // 0 </code></pre>
+                            <p class="card-text">You can also save an <b>array into a map</b>, like this: </p>
+<pre><code>let map = new Map([["name", "Nicholas"], ["age", 25]]); 
+
+console.log(map.has("name"));   // true 
+console.log(map.get("name"));   // "Nicholas" 
+console.log(map.has("age"));    // true 
+console.log(map.get("age"));    // 25 
+console.log(map.size);          // 2 </code></pre>
+                            <p class="card-text">And you can also run a <b>foreach</b> in the map, you need 3 values, the value, the key and the map from which the value is read, example:</p>
+<pre><code>let map = new Map([ ["name", "Nicholas"], ["age", 25]]); 
+ 
+map.forEach(function(value, key, ownerMap) { 
+    console.log(key + " " + value); 
+    console.log(ownerMap === map); 
+}); 
+
+// 
+name Nicholas 
+true 
+age 25 
+true </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Weak maps</h5>
+                            <hr>
+                            <p class="card-text">WeakMaps are use most commontly for not saving data after a element in DOM is deleted</p>
+                            <p class="card-text">Yo can initializate a weakmap like this: </p>
+<pre><code>let key1 = {}, 
+key2 = {}, 
+map = new WeakMap([[key1, "Hello"], [key2, 42]]); 
+ 
+console.log(map.has(key1));     // true 
+console.log(map.get(key1));     // "Hello" 
+console.log(map.has(key2));     // true 
+console.log(map.get(key2));     // 42 
+
+ </code></pre>
+                            <p class="card-text">WeakMaps methods has(), delete() are available, but there is no clear() method, as we dont have enumerated registers, there is no index.</p>
+<pre><code>let map = new WeakMap(), 
+    element = document.querySelector(".element"); 
+ 
+map.set(element, "Original"); 
+ 
+console.log(map.has(element));   // true 
+console.log(map.get(element));   // "Original" 
+ 
+map.delete(element); 
+console.log(map.has(element));   // false 
+console.log(map.get(element));   // undefined 
+
+///////////////////////////////////////////////////////////////////// 
+
+let map = new WeakMap(), 
+    element = document.querySelector(".element"); 
+ 
+map.set(element, "Original"); 
+ 
+let value = map.get(element); 
+console.log(value);             // "Original" 
+ 
+// remove the element 
+element.parentNode.removeChild(element); 
+element = null; 
+ 
+// the weak map is empty at this point </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

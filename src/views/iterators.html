@@ -21,9 +21,363 @@
                     <a href="./maps.html"><li>Sets and Maps</li></a>
                     <a href="./iterators.html" class="active"><li>Iterators and Generators</li></a>
                     <a href="./classes.html"><li>Classes</li></a>
+                    <a href="./promises.html"><li>Promises and Asynchronous Programming</li></a>
+                    <a href="./encapsulating.html"><li>Encapsulating Code with Modules</li></a>
                 </ul>
             </nav>
         </header>
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Iterators</h5>
+                            <hr>
+                            <p class="card-text">Objects with an specific interface for the iteration, all the iterators have as a result an object, and that object has a <b>value</b> and a <b>done</b> properties, and also a <b>next</b> method, example:</p>
+<pre><code>function createIterator(items) { 
+    var i = 0; 
+    
+    return { 
+        next: function() { 
+            var done = (i >= items.length); 
+            var value = !done ? items[i++] : undefined; 
+    
+            return { 
+                done: done, 
+                value: value 
+            }; 
+        } 
+    }; 
+} 
+    
+var iterator = createIterator([1, 2, 3]); 
+    
+console.log(iterator.next());           // "{ value: 1, done: false }" 
+console.log(iterator.next());           // "{ value: 2, done: false }" 
+console.log(iterator.next());           // "{ value: 3, done: false }" 
+console.log(iterator.next());           // "{ value: undefined, done: true }" 
+    
+// for all further calls 
+console.log(iterator.next());           // "{ value: undefined, done: true }" </code></pre>
+                        <p class="card-text">In this example, we assign a value for "done" and for "value", the done property has a boolean value, and the value property can have any type of value, and with the "console.log" we are testing each value in the array we sent to the iterator, <b>Iterators are usefull because they execute like any other loop, but they only iterate once when you call the function, and it can wait until you call them again.</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Generators</h5>
+                            <hr>
+                            <p class="card-text">A generator is a function that returns an iterator, you need to indicate them by a *, and the resulting values that the iterator should return are defined with <b>yiel</b> property
+                            , and after each call to the next iteration, it stops until the next call to the iterator with <b>next()</b> method</p>
+                            <p class="card-text">In this example we create a <b>simple generator, a generator with an array as input, and a generator inside a variable</b>, examples: </p>
+<pre><code>// generator 
+function *createIterator() { 
+    yield 1; 
+    yield 2; 
+    yield 3; 
+} 
+    
+// generators are called like regular functions but return an iterator 
+let iterator = createIterator(); 
+    
+console.log(iterator.next().value);     // 1 
+console.log(iterator.next().value);     // 2 
+console.log(iterator.next().value);     // 3 
+
+//////////////////////////////////////////////////////////////// 
+
+function *createIterator(items) { 
+    for (let i = 0; i < items.length; i++) { 
+        yield items[i]; 
+    } 
+} 
+    
+let iterator = createIterator([1, 2, 3]); 
+    
+console.log(iterator.next());           // "{ value: 1, done: false }" 
+console.log(iterator.next());           // "{ value: 2, done: false }" 
+console.log(iterator.next());           // "{ value: 3, done: false }" 
+console.log(iterator.next());           // "{ value: undefined, done: true }" 
+    
+// for all further calls 
+console.log(iterator.next());           // "{ value: undefined, done: true }" 
+
+//////////////////////////////////////////////////////////////// 
+
+var o = { 
+    *createIterator(items) { 
+        for (let i = 0; i < items.length; i++) { 
+            yield items[i]; 
+        } 
+    } 
+}; 
+    
+let iterator = o.createIterator([1, 2, 3]); </code></pre>
+                            <p class="text-card">If you use <b>return</b> the iteration ends, and returns a undefined value if you try to continue with .next(), example: </p>
+<pre><code>function *createIterator() { 
+    yield 1; 
+    return; 
+    yield 2; 
+    yield 3; 
+} 
+ 
+let iterator = createIterator(); 
+ 
+console.log(iterator.next());           // "{ value: 1, done: false }" 
+console.log(iterator.next());           // "{ value: undefined, done: true }" </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">For-of</h5>
+                            <hr>
+                            <p class="card-text">For-of structure</p>
+<pre><code>let values = [1, 2, 3]; 
+ 
+for (let num of values) { 
+    console.log(num); 
+} 
+
+// 
+1 
+2 
+3 </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Default iterators [symbol.iterator]</h5>
+                            <hr>
+                            <p class="card-text">We can use [symbol.iterator] like an iterator but we need to specify the values for that element, example:</p>
+<pre><code> let values = [1, 2, 3]; 
+    let iterator = values[Symbol.iterator](); 
+     
+    console.log(iterator.next());           // "{ value: 1, done: false }" 
+    console.log(iterator.next());           // "{ value: 2, done: false }" 
+    console.log(iterator.next());           // "{ value: 3, done: false }" 
+    console.log(iterator.next());           // "{ value: undefined, done: true }" </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">IsIterable</h5>
+                            <hr>
+                            <p class="card-text">The IsIterable verifies if the default iterator exists on the object and is a function, example:</p>
+<pre><code>function isIterable(object) { 
+    return typeof object[Symbol.iterator] === "function"; 
+} 
+ 
+console.log(isIterable([1, 2, 3]));     // true 
+console.log(isIterable("Hello"));       // true 
+console.log(isIterable(new Map()));     // true 
+console.log(isIterable(new Set()));     // true 
+console.log(isIterable(new WeakMap())); // false 
+console.log(isIterable(new WeakSet())); // false </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Types of collections</h5>
+                            <hr>
+                            <p class="card-text"> <b>Arrays, maps, sets</b> all of them have:</p>
+                            <ul>
+                                <li>Entries() - Returns an iterator whose values are a key-value pair</li>
+                                <li>Values() - Returns an iterator whose values are the values of the collection</li>
+                                <li>Keys() - Returns an iterator whose values are the keys contained in the collection</li>
+                            </ul>
+                            <p class="card-text">Entries example:</p>
+<pre><code>let colors = [ "red", "green", "blue" ]; 
+let tracking = new Set([1234, 5678, 9012]); 
+let data = new Map(); 
+    
+data.set("title", "Understanding ECMAScript 6"); 
+data.set("format", "ebook"); 
+    
+for (let entry of colors.entries()) { 
+    console.log(entry); 
+} 
+    
+for (let entry of tracking.entries()) { 
+    console.log(entry); 
+} 
+    
+for (let entry of data.entries()) { 
+    console.log(entry); 
+} 
+
+// 
+[0, "red"] 
+[1, "green"] 
+[2, "blue"] 
+[1234, 1234] 
+[5678, 5678] 
+[9012, 9012] 
+["title", "Understanding ECMAScript 6"] 
+["format", "ebook"] </code></pre>
+                            <p class="card-text">Values example:</p>
+<pre><code>let colors = [ "red", "green", "blue" ]; 
+let tracking = new Set([1234, 5678, 9012]); 
+let data = new Map(); 
+    
+data.set("title", "Understanding ECMAScript 6"); 
+data.set("format", "ebook"); 
+    
+for (let value of colors.values()) { 
+    console.log(value); 
+} 
+    
+for (let value of tracking.values()) { 
+    console.log(value); 
+} 
+    
+for (let value of data.values()) { 
+    console.log(value); 
+} 
+
+// 
+"red" 
+"green" 
+"blue" 
+1234 
+5678 
+9012 
+"Understanding ECMAScript 6" 
+"ebook" </code></pre>
+                            <p class="card-text">Keyes example:</p>
+<pre><code>let colors = [ "red", "green", "blue" ]; 
+let tracking = new Set([1234, 5678, 9012]); 
+let data = new Map(); 
+    
+data.set("title", "Understanding ECMAScript 6"); 
+data.set("format", "ebook"); 
+    
+for (let key of colors.keys()) { 
+    console.log(key); 
+} 
+    
+for (let key of tracking.keys()) { 
+    console.log(key); 
+} 
+    
+for (let key of data.keys()) { 
+    console.log(key); 
+} 
+
+// 
+0 
+1 
+2 
+1234 
+5678 
+9012 
+"title" 
+"format" </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Spread operator to assign values</h5>
+                            <hr>
+<pre><code>let set = new Set([1, 2, 3, 3, 3, 4, 5]), 
+    array = [...set]; 
+    
+console.log(array);             // [1,2,3,4,5] 
+
+///////////////////////////////////////////////////////////////////////// 
+
+let map = new Map([ ["name", "Nicholas"], ["age", 25]]), 
+    array = [...map]; 
+    
+console.log(array);         // [ ["name", "Nicholas"], ["age", 25]] 
+
+///////////////////////////////////////////////////////////////////////// 
+
+let smallNumbers = [1, 2, 3], 
+    bigNumbers = [100, 101, 102], 
+    allNumbers = [0, ...smallNumbers, ...bigNumbers]; 
+    
+console.log(allNumbers.length);     // 7 
+console.log(allNumbers);    // [0, 1, 2, 3, 100, 101, 102] </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Use of iterators to create iterators</h5>
+                            <hr>
+<pre><code>function *createNumberIterator() { 
+    yield 1; 
+    yield 2; 
+} 
+ 
+function *createColorIterator() { 
+    yield "red"; 
+    yield "green"; 
+} 
+ 
+function *createCombinedIterator() { 
+    yield *createNumberIterator(); 
+    yield *createColorIterator(); 
+    yield true; 
+} 
+ 
+var iterator = createCombinedIterator(); 
+ 
+console.log(iterator.next());           // "{ value: 1, done: false }" 
+console.log(iterator.next());           // "{ value: 2, done: false }" 
+console.log(iterator.next());           // "{ value: "red", done: false }" 
+console.log(iterator.next());           // "{ value: "green", done: false }" 
+console.log(iterator.next());           // "{ value: true, done: false }" 
+console.log(iterator.next());           // "{ value: undefined, done: true }" </code></pre>
+                                <p class="card-text"><b>Complex iterator example:</b></p>
+<pre><code>function *createNumberIterator() { 
+    yield 1; 
+    yield 2; 
+    return 3; 
+} 
+    
+function *createRepeatingIterator(count) { 
+    for (let i=0; i < count; i++) { 
+        yield "repeat"; 
+    } 
+} 
+    
+function *createCombinedIterator() { 
+    let result = yield *createNumberIterator(); 
+    yield *createRepeatingIterator(result); 
+} 
+    
+var iterator = createCombinedIterator(); 
+    
+console.log(iterator.next());           // "{ value: 1, done: false }" 
+console.log(iterator.next());           // "{ value: 2, done: false }" 
+console.log(iterator.next());           // "{ value: "repeat", done: false }" 
+console.log(iterator.next());           // "{ value: "repeat", done: false }" 
+console.log(iterator.next());           // "{ value: "repeat", done: false }" 
+console.log(iterator.next());           // "{ value: undefined, done: true }" </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
